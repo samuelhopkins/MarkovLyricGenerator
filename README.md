@@ -1,2 +1,2 @@
 # MarkovFreestlyeGenerator
-A Markov chain generator for hot spits. Might scrape from genius.com for a given artist 
+A Markov chain generator lyrics. Uses multithreaded web scraper to train data set from Genius.com
