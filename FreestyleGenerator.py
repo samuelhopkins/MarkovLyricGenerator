@@ -1,5 +1,5 @@
 import sys
-from RapScrape import RapScraper
+from LyricScrape import LyricScraper
 import random
 from collections import defaultdict
 
@@ -25,7 +25,8 @@ class FreestyleGenerator():
 
 	def train(self):
 		strength=self.strength
-		songLyricList=LyricScraper(self.artist).scrape()
+		Scraper=LyricScraper(self.artist)
+		songLyricList=Scraper.scrape()
 		for song in songLyricList:
 			songWordList=song.split()
 			length=len(songWordList)
@@ -47,13 +48,12 @@ class FreestyleGenerator():
 				self.wordDict[keyTup].append(songWordList[j])
 				i=j
 		self.wordList=self.wordDict.keys()
-		print len(self.wordList)/20
+		print len(self.wordList)/(20 * Scraper.pages)
 
 	def generate(self,length):
 		self.train()
 		strength=self.strength
 		options=len(self.wordList)
-		print options
 		rand=random.randint(0,options)
 		seed=self.wordList[rand]
 		freeStyle=""
@@ -65,7 +65,6 @@ class FreestyleGenerator():
 				nextTup+=(seed[j],)
 
 			randNextInt=random.randint(0,followsLen)
-			print randNextInt
 			next=follows[randNextInt]
 			freeStyle+=" "+next
 			nextTup+=(next,)
