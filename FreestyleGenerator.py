@@ -3,61 +3,82 @@ from RapScrape import RapScraper
 import random
 from collections import defaultdict
 
+def noClosures(string):
+	if ("[" in string or
+		 "]" in string or
+		 "(" in string or
+		 ")" in string):
+		return False
+	else:
+		return string
 
 class FreestyleGenerator():
 	artist=""
-	wordDict=defaultdict(set)
+	wordDict=defaultdict(list)
 	wordList=[]
-	def __init__(self,artist):
+	strength=1
+	def __init__(self,artist,strength):
 		self.artist=artist
+		self.strength=strength
+
 
 
 	def train(self):
-		songLyricList=RapScraper(self.artist).scrape()
+		strength=self.strength
+		songLyricList=LyricScraper(self.artist).scrape()
 		for song in songLyricList:
 			songWordList=song.split()
 			length=len(songWordList)
-			for i in range(length-1):
-				self.wordDict[songWordList[i]].add(songWordList[i+1])
-		
-		self.wordList=self.wordDict.keys()
+			for i in range(length-strength):
+				j=i+strength
+				while (j < length-1) and (noClosures(songWordList[j]) is False):
+					j+=1
 
-	def generate(self,artist,length):
+				kindex=i
+				keyTup=()
+				step=0
+				limit=strength
+				while step < limit and (kindex+step < length):
+					if (noClosures(songWordList[kindex+step])):
+						keyTup+=(songWordList[kindex+step],)
+					else:
+						limit+=1
+					step+=1
+				self.wordDict[keyTup].append(songWordList[j])
+				i=j
+		self.wordList=self.wordDict.keys()
+		print len(self.wordList)/20
+
+	def generate(self,length):
 		self.train()
+		strength=self.strength
 		options=len(self.wordList)
-		rand=random.randint(options)
+		print options
+		rand=random.randint(0,options)
 		seed=self.wordList[rand]
 		freeStyle=""
 		for i in range(length):
 			follows=self.wordDict[seed]
 			followsLen=len(follows)
+			nextTup=()
+			for j in range(1,strength):
+				nextTup+=(seed[j],)
+
 			randNextInt=random.randint(0,followsLen)
+			print randNextInt
 			next=follows[randNextInt]
 			freeStyle+=" "+next
-			seed=next
+			nextTup+=(next,)
+			seed=nextTup
 		
 
 		return freeStyle
 
-	def generate(self,length):
-		self.train()
-		options=len(self.wordList)
-		rand=random.randint(0,options)
-		print options
-		seed=self.wordList[rand]
-		freeStyle=""
-		for i in range(length):
-			follows=list(self.wordDict[seed])
-			followsLen=len(follows)
-			randNextInt=random.randint(0,followsLen-1)
-			next=follows[randNextInt]
-			freeStyle+=" "+next
-			seed=next
 
-		return freeStyle
 
 if __name__=="__main__":
-	new=FreestyleGenerator("Eminem")
-	print new.generate(40)
+	new=FreestyleGenerator(sys.argv[1],int(sys.argv[2]))
+	print new.generate(int(sys.argv[3]))
+
 
 

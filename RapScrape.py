@@ -4,14 +4,14 @@ import requests
 from urlparse import urljoin
 
 
-class RapScraper():
+class LyricScraper():
 	artist=""
 	BASE_URL="http://genius.com/search?q="
 	def __init__(self,artist):
 		artistList=artist.split()
 		self.artist=("-").join(artistList)
 		self.artist_URL=self.BASE_URL+"/"+self.artist+"/"
-		print self.artist_URL
+		self.artist_URL
 
 	def scrape(self):
 		response=requests.get(self.artist_URL, headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) \
