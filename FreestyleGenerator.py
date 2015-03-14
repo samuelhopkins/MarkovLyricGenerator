@@ -71,6 +71,9 @@ class FreestyleGenerator():
 
 
 
-
+if __name__=="__main__":
+	new=FreestyleGenerator("Taylor Swift",3)
+	new.train()
+	print new.generate(150)
 
 
