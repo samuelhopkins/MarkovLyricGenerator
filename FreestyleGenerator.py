@@ -16,7 +16,7 @@ def noClosures(lyrics):
 
 class FreestyleGenerator():
 	artist=""
-	wordDict=defaultdict(list)
+	wordDict=defaultdict(set)
 	wordList=[]
 	def __init__(self,artist,strength):
 		self.artist=artist
@@ -41,7 +41,7 @@ class FreestyleGenerator():
 					keyTup+=(songWordList[j],)
 					j+=1
 					step+=1
-				self.wordDict[keyTup].append(songWordList[j])
+				self.wordDict[keyTup].add(songWordList[j])
 		self.wordList=self.wordDict.keys()
 
 #generate will generate a freestyle of "length" many words
@@ -52,7 +52,7 @@ class FreestyleGenerator():
 		seed=self.wordList[rand]
 		freeStyle=u""
 		for i in range(length):
-			follows=self.wordDict[seed]
+			follows=list(self.wordDict[seed])
 			followsLen=len(follows)
 			if followsLen is 0:
 				seed=self.wordList[random.randint(0,options-1)]
@@ -72,7 +72,7 @@ class FreestyleGenerator():
 
 
 if __name__=="__main__":
-	new=FreestyleGenerator("Taylor Swift",3)
+	new=FreestyleGenerator("Eminem",3)
 	new.train()
 	print new.generate(150)
 
