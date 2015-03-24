@@ -28,7 +28,7 @@ class pageThread(threading.Thread):
 			response = requests.get(link)
 			soup = BeautifulSoup(response.text)
 			title=soup.select('.text_artist > a')
-			if str(title[0].text.split()[0].strip()) != self.artistString:
+			if str(title[0].text.strip()) != self.artistString:
 				continue
 			lyrics= soup.find('div', class_='lyrics').text.strip()
 			listLock.acquire(True)

@@ -14,7 +14,7 @@ def noClosures(lyrics):
 			lyrics.remove(string)
 	
 
-class FreestyleGenerator():
+class Generator():
 	artist=""
 	wordDict=defaultdict(set)
 	wordList=[]
@@ -48,6 +48,7 @@ class FreestyleGenerator():
 	def generate(self,length):
 		strength=self.strength
 		options=len(self.wordList)
+		print options
 		rand=random.randint(0,options)
 		seed=self.wordList[rand]
 		freeStyle=u""
@@ -72,7 +73,7 @@ class FreestyleGenerator():
 
 
 if __name__=="__main__":
-	new=FreestyleGenerator("Eminem",3)
+	new=Generator("Drake",3)
 	new.train()
 	print new.generate(150)
 
